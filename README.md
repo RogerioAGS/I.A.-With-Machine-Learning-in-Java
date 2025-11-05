@@ -393,7 +393,313 @@ public class ID3Algorithm {
 
 #ACURÁCIA (Precisão) do Modelo: 3/3 = 100.00%
 
-Resposta do Projeto da Seção 1:
+#Seção 1 - Projeto: Recomendador de Filmes/Séries (ID3 em Java)
+#Dataset Utilizado (14 Instâncias)
+#O objetivo é classificar se o usuário deve Assistir (Sim/Não) a um conteúdo, baseado em quatro características comuns:
+
+<img width="431" height="813" alt="Captura de tela 2025-11-05 202117" src="https://github.com/user-attachments/assets/419684d1-fe40-42de-9305-2b7586d361c9" />
+
+Variáveis Globais do Projeto:
+TARGET_ATTRIBUTE: "Assistir"
+ATTRIBUTES: Gênero, Duração, Avaliação, Atores
+
+#Exercício 1: Setup e Representação de Dados
+#Foco: Criação de classes (TreeNode.java é idêntica) e carregamento dos dados.
+#Código Esperado (Exercício 1)
+ID3Algorithm.java (Trecho de DATA preenchido):
+Java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
+import java.lang.Math;
+import java.util.Comparator;
+
+public class ID3Algorithm {
+    
+    // VARIÁVEIS GLOBAIS DE SETUP
+    public static final String TARGET_ATTRIBUTE = "Assistir";
+    public static final List<String> ATTRIBUTES = List.of("Gênero", "Duração", "Avaliação", "Atores");
+
+    // Conjunto de dados (Dataset) - 14 Instâncias
+    public static final List<Map<String, String>> DATA = List.of(
+        Map.of("Gênero", "Ação", "Duração", "Curta", "Avaliação", "Baixa", "Atores", "Desconhecidos", TARGET_ATTRIBUTE, "Não"),
+        Map.of("Gênero", "Ação", "Duração", "Curta", "Avaliação", "Baixa", "Atores", "Conhecidos", TARGET_ATTRIBUTE, "Não"),
+        Map.of("Gênero", "Comédia", "Duração", "Média", "Avaliação", "Alta", "Atores", "Desconhecidos", TARGET_ATTRIBUTE, "Sim"),
+        Map.of("Gênero", "Drama", "Duração", "Longa", "Avaliação", "Média", "Atores", "Desconhecidos", TARGET_ATTRIBUTE, "Sim"),
+        Map.of("Gênero", "Drama", "Duração", "Média", "Avaliação", "Alta", "Atores", "Desconhecidos", TARGET_ATTRIBUTE, "Sim"),
+        Map.of("Gênero", "Drama", "Duração", "Média", "Avaliação", "Alta", "Atores", "Conhecidos", TARGET_ATTRIBUTE, "Não"),
+        Map.of("Gênero", "Sci-Fi", "Duração", "Longa", "Avaliação", "Baixa", "Atores", "Conhecidos", TARGET_ATTRIBUTE, "Sim"),
+        Map.of("Gênero", "Ação", "Duração", "Média", "Avaliação", "Média", "Atores", "Desconhecidos", TARGET_ATTRIBUTE, "Não"),
+        Map.of("Gênero", "Ação", "Duração", "Alta", "Avaliação", "Alta", "Atores", "Conhecidos", TARGET_ATTRIBUTE, "Sim"),
+        Map.of("Gênero", "Drama", "Duração", "Média", "Avaliação", "Média", "Atores", "Desconhecidos", TARGET_ATTRIBUTE, "Sim"),
+        Map.of("Gênero", "Ação", "Duração", "Longa", "Avaliação", "Média", "Atores", "Conhecidos", TARGET_ATTRIBUTE, "Sim"),
+        Map.of("Gênero", "Comédia", "Duração", "Longa", "Avaliação", "Média", "Atores", "Conhecidos", TARGET_ATTRIBUTE, "Sim"),
+        Map.of("Gênero", "Comédia", "Duração", "Média", "Avaliação", "Alta", "Atores", "Desconhecidos", TARGET_ATTRIBUTE, "Sim"),
+        Map.of("Gênero", "Drama", "Duração", "Curta", "Avaliação", "Baixa", "Atores", "Conhecidos", TARGET_ATTRIBUTE, "Não")
+    );
+
+    public static void main(String[] args) {
+        System.out.println("Setup concluído! Total de Instâncias: " + DATA.size());
+    }
+
+    // MÉTODOS A SEREM IMPLEMENTADOS
+    public static double calculateEntropy(List<Map<String, String>> data, String targetAttribute) { return 0.0; }
+    public static double calculateGain(List<Map<String, String>> data, String attribute, String targetAttribute) { return 0.0; }
+    public static TreeNode buildTree(List<Map<String, String>> data, List<String> availableAttributes, String targetAttribute) { return null; }
+    public static void printTree(TreeNode node, String prefix) { /* ... */ }
+    public static String classify(TreeNode node, Map<String, String> instance) { return null; }
+}
+
+
+
+#Exercício 2: O Coração Matemático – Entropia
+#Código Esperado (Exercício 2)
+#A lógica do calculateEntropy é idêntica à do projeto anterior, focando apenas no novo TARGET_ATTRIBUTE ("Assistir").
+#Java
+// ... (código anterior)
+
+    public static void main(String[] args) {
+        // ... (Verificação de setup do Ex. 1)
+
+        double initialEntropy = calculateEntropy(DATA, TARGET_ATTRIBUTE);
+        System.out.printf("\nEntropia Inicial (total): %.4f\n", initialEntropy);
+    }
+    
+    public static double calculateEntropy(List<Map<String, String>> data, String targetAttribute) {
+        if (data.isEmpty()) { return 0.0; }
+        // Lógica de contagem e aplicação da fórmula: -p * log2(p)
+        Map<String, Long> countByClass = data.stream()
+            .collect(Collectors.groupingBy(instance -> instance.get(targetAttribute), Collectors.counting()));
+        double entropy = 0.0;
+        int totalInstances = data.size();
+        for (Long count : countByClass.values()) {
+            double probability = (double) count / totalInstances;
+            if (probability > 0) {
+                entropy -= probability * (Math.log(probability) / Math.log(2)); 
+            }
+        }
+        return entropy;
+    }
+
+// ... (código posterior)
+
+
+Saída Esperada (Exercício 2):
+(9 Sim / 5 Não) $\approx 0.9403$
+Entropia Inicial (total): 0.9403
+
+
+
+#Desafio 1: Visualização da Lógica (Testando Recursão)
+#Código Esperado (Desafio 1)
+#A lógica de teste é a mesma, mas os rótulos de exemplo refletem o novo projeto.
+#Java
+// ... (código anterior)
+
+    public static void main(String[] args) {
+        // ... (Testes do Ex. 2)
+        
+        // ------------------ DESAFIO 1: TESTE DA FUNÇÃO RECURSIVA printTree ------------------
+        
+        // Cria uma micro-árvore manual para teste (Ex: Teste por Gênero -> Avaliação)
+        TreeNode rootTest = new TreeNode("Gênero", false);
+        TreeNode acaoTest = new TreeNode("Avaliação", false);
+        TreeNode comediaTest = new TreeNode("Sim", true);
+        TreeNode dramaTest = new TreeNode("Atores", false);
+
+        rootTest.addChild("Ação", acaoTest);
+        rootTest.addChild("Comédia", comediaTest);
+        rootTest.addChild("Drama", dramaTest);
+
+        acaoTest.addChild("Alta", new TreeNode("Sim", true));
+        acaoTest.addChild("Baixa", new TreeNode("Não", true));
+        dramaTest.addChild("Desconhecidos", new TreeNode("Sim", true));
+
+        System.out.println("\n--- Teste de Percurso em Árvore ---");
+        printTree(rootTest, "");
+    }
+    
+    public static void printTree(TreeNode node, String prefix) {
+        // Lógica recursiva: Caso Base (Folha) e Passo Recursivo (Nó de Teste)
+        if (node.isLeaf) {
+            System.out.println(prefix + "-> DECISÃO: " + node.attribute);
+            return;
+        }
+        System.out.println(prefix + "-> TESTE: " + node.attribute + "?");
+        for (Map.Entry<String, TreeNode> entry : node.children.entrySet()) {
+            String attributeValue = entry.getKey();
+            TreeNode childNode = entry.getValue();
+            String newPrefix = prefix + "   [Se " + node.attribute + " é " + attributeValue + "] ";
+            printTree(childNode, newPrefix);
+        }
+    }
+// ...
+
+
+Saída Esperada (Desafio 1):
+--- Teste de Percurso em Árvore ---
+-> TESTE: Gênero?
+   [Se Gênero é Ação] -> TESTE: Avaliação?
+      [Se Avaliação é Alta] -> DECISÃO: Sim
+      [Se Avaliação é Baixa] -> DECISÃO: Não
+   [Se Gênero é Comédia] -> DECISÃO: Sim
+   [Se Gênero é Drama] -> TESTE: Atores?
+      [Se Atores é Desconhecidos] -> DECISÃO: Sim
+
+
+
+#Exercício 3: Seleção do Atributo e Construção Recursiva
+#Código Esperado (Exercício 3)
+#Os métodos calculateGain e buildTree são exatamente os mesmos do projeto anterior em termos de lógica, utilizando o calculateEntropy recém-criado.
+#Java
+// ... (código anterior)
+
+    public static void main(String[] args) {
+        // ... (Testes anteriores)
+
+        // ------------------ EXERCÍCIO 3: CONSTRUÇÃO E IMPRESSÃO DA ÁRVORE ------------------
+        System.out.println("\n--- Construção da Árvore ID3 ---");
+        TreeNode decisionTree = buildTree(DATA, ATTRIBUTES, TARGET_ATTRIBUTE);
+        printTree(decisionTree, ""); 
+    }
+
+    public static double calculateGain(List<Map<String, String>> data, String attribute, String targetAttribute) {
+        // Lógica de Ganho (Ganho = Entropia Total - Entropia Ponderada)
+        double totalEntropy = calculateEntropy(data, targetAttribute);
+        int totalInstances = data.size();
+        Map<String, List<Map<String, String>>> splitData = data.stream()
+            .collect(Collectors.groupingBy(instance -> instance.get(attribute)));
+        double weightedEntropy = 0.0;
+        for (List<Map<String, String>> subset : splitData.values()) {
+            double probability = (double) subset.size() / totalInstances;
+            weightedEntropy += probability * calculateEntropy(subset, targetAttribute);
+        }
+        return totalEntropy - weightedEntropy;
+    }
+
+    public static TreeNode buildTree(List<Map<String, String>> data, List<String> availableAttributes, String targetAttribute) {
+        // Lógica ID3: Casos Base, Encontrar Maior Ganho (chamando calculateGain), e Recursão
+        if (data.stream().allMatch(instance -> instance.get(targetAttribute).equals(data.get(0).get(targetAttribute)))) {
+            return new TreeNode(data.get(0).get(targetAttribute), true);
+        }
+        if (availableAttributes.isEmpty() || data.isEmpty()) {
+            // Retorna a classe majoritária
+            String majorityClass = data.stream().collect(Collectors.groupingBy(instance -> instance.get(targetAttribute), Collectors.counting()))
+                .entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse("Não");
+            return new TreeNode(majorityClass, true);
+        }
+
+        String bestAttribute = availableAttributes.stream()
+            .max(Comparator.comparingDouble(attribute -> calculateGain(data, attribute, targetAttribute)))
+            .orElseThrow(() -> new IllegalStateException("Erro: Não foi possível encontrar o melhor atributo."));
+
+        TreeNode root = new TreeNode(bestAttribute, false);
+        List<String> remainingAttributes = new ArrayList<>(availableAttributes);
+        remainingAttributes.remove(bestAttribute);
+        
+        Map<String, List<Map<String, String>>> splitData = data.stream()
+            .collect(Collectors.groupingBy(instance -> instance.get(bestAttribute)));
+
+        for (Map.Entry<String, List<Map<String, String>>> entry : splitData.entrySet()) {
+            root.addChild(entry.getKey(), buildTree(entry.getValue(), remainingAttributes, targetAttribute));
+        }
+
+        return root;
+    }
+}
+
+
+#Saída Esperada (Exercício 3 - Lógica da Árvore):
+A árvore mais provável construída com este dataset começa com Avaliação.
+--- Construção da Árvore ID3 ---
+-> TESTE: Avaliação?
+   [Se Avaliação é Baixa] -> TESTE: Atores?
+      [Se Atores é Desconhecidos] -> DECISÃO: Não
+      [Se Atores é Conhecidos] -> TESTE: Gênero?
+         [Se Gênero é Ação] -> DECISÃO: Não
+         [Se Gênero é Sci-Fi] -> DECISÃO: Sim
+         [Se Gênero é Drama] -> DECISÃO: Não
+   [Se Avaliação é Média] -> DECISÃO: Sim
+   [Se Avaliação é Alta] -> TESTE: Atores?
+      [Se Atores é Desconhecidos] -> DECISÃO: Sim
+      [Se Atores é Conhecidos] -> DECISÃO: Não
+
+
+
+#Desafio 2: Generalização e Avaliação do Modelo
+#Código Esperado (Desafio 2 - Final do Projeto)
+#Java
+// ... (código anterior)
+
+    public static void main(String[] args) {
+        // ... (Construção da Árvore do Ex. 3)
+        TreeNode decisionTree = buildTree(DATA, ATTRIBUTES, TARGET_ATTRIBUTE);
+        // ... (printTree)
+
+        // ------------------ DESAFIO 2: TESTE DE INFERÊNCIA E ACURÁCIA ------------------
+
+        // Dados de TESTE (Instâncias NUNCA VISTAS)
+        List<Map<String, String>> TEST_DATA = List.of(
+            // 1. Gênero: Ação, Duração: Média, Avaliação: Baixa, Atores: Conhecidos (Esperado: Não)
+            Map.of("Gênero", "Ação", "Duração", "Média", "Avaliação", "Baixa", "Atores", "Conhecidos", TARGET_ATTRIBUTE, "Não"), 
+            // 2. Gênero: Comédia, Duração: Longa, Avaliação: Alta, Atores: Desconhecidos (Esperado: Sim)
+            Map.of("Gênero", "Comédia", "Duração", "Longa", "Avaliação", "Alta", "Atores", "Desconhecidos", TARGET_ATTRIBUTE, "Sim"), 
+            // 3. Gênero: Drama, Duração: Curta, Avaliação: Média, Atores: Desconhecidos (Esperado: Sim)
+            Map.of("Gênero", "Drama", "Duração", "Curta", "Avaliação", "Média", "Atores", "Desconhecidos", TARGET_ATTRIBUTE, "Sim")
+        );
+        
+        int correctPredictions = 0;
+        
+        System.out.println("\n--- Avaliação do Modelo (Testando Recomendações) ---");
+
+        for (Map<String, String> testInstance : TEST_DATA) {
+            String actualClass = testInstance.get(TARGET_ATTRIBUTE);
+            Map<String, String> instanceToClassify = new HashMap<>(testInstance);
+            instanceToClassify.remove(TARGET_ATTRIBUTE); 
+            
+            String prediction = classify(decisionTree, instanceToClassify);
+            
+            if (prediction.equals(actualClass)) {
+                correctPredictions++;
+                System.out.print("✅ ");
+            } else {
+                System.out.print("❌ ");
+            }
+            System.out.println("Previsto: " + prediction + " | Real: " + actualClass);
+        }
+
+        double accuracy = (double) correctPredictions / TEST_DATA.size() * 100;
+        System.out.printf("\nACURÁCIA (Precisão) do Modelo: %d/%d = %.2f%%\n", 
+                          correctPredictions, TEST_DATA.size(), accuracy);
+    }
+
+    public static String classify(TreeNode node, Map<String, String> instance) {
+        // Lógica de Classificação: Percorre a árvore recursivamente
+        if (node.isLeaf) {
+            return node.attribute;
+        }
+        String attributeValue = instance.get(node.attribute);
+        if (node.children.containsKey(attributeValue)) {
+            return classify(node.children.get(attributeValue), instance);
+        } else {
+            System.err.println("Aviso: Valor não visto ('" + attributeValue + "') no atributo '" + node.attribute + "'. Não foi possível classificar.");
+            return "DESCONHECIDO"; 
+        }
+    }
+}
+
+
+Saída Esperada (Desafio 2 - Teste de Acurácia):
+--- Avaliação do Modelo (Testando Recomendações) ---
+✅ Previsto: Não | Real: Não
+✅ Previsto: Sim | Real: Sim
+✅ Previsto: Sim | Real: Sim
+
+ACURÁCIA (Precisão) do Modelo: 3/3 = 100.00%
+
+#Resposta do Projeto 2 da Seção 1: Projeto: Recomendador de Filmes/Séries (ID3 em Java).
 
 import java.util.HashMap;
 import java.util.Map;

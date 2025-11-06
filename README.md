@@ -11,10 +11,10 @@ Variáveis Globais do Projeto:
 TARGET_ATTRIBUTE: "Aprovar"
 ATTRIBUTES: Histórico, Renda, Emprego, Garantia
 
-#Exercício 1: Setup e Representação de Dados
-#Foco: Criação de classes e organização do dataset.
-#Código de Início (Setup do Projeto)
-#O código da classe TreeNode.java é o mesmo (pois a estrutura de árvore não muda).
+# Exercício 1: Setup e Representação de Dados
+# Foco: Criação de classes e organização do dataset.
+# Código de Início (Setup do Projeto)
+# O código da classe TreeNode.java é o mesmo (pois a estrutura de árvore não muda).
 ID3Algorithm.java (Início):
 Java
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class ID3Algorithm {
 }
 
 
-#Código Esperado (Exercício 1)
+# Código Esperado (Exercício 1)
 ID3Algorithm.java (Trecho de DATA preenchido):
 Java
 // ... (imports)
@@ -89,10 +89,10 @@ public class ID3Algorithm {
 
 
 
-#Exercício 2: O Coração Matemático – Entropia
-#Foco: Implementar a fórmula da Entropia (calculateEntropy).
-#Código Esperado (Exercício 2)
-#ID3Algorithm.java (Método preenchido e Teste no main):
+# Exercício 2: O Coração Matemático – Entropia
+# Foco: Implementar a fórmula da Entropia (calculateEntropy).
+# Código Esperado (Exercício 2)
+# ID3Algorithm.java (Método preenchido e Teste no main):
 Java
 // ... (imports)
 
@@ -131,16 +131,16 @@ public class ID3Algorithm {
     // ... (Outros métodos)
 }
 
-#Saída Esperada (Exercício 2):
-#Total de Sim: 8
-#Total de Não: 6
-#Entropia: $\frac{8}{14}\cdot\log_2(\frac{14}{8}) + \frac{6}{14}\cdot\log_2(\frac{14}{6}) \approx 0.9852$
-#Entropia Inicial (total): 0.9852
+# Saída Esperada (Exercício 2):
+# Total de Sim: 8
+# Total de Não: 6
+# Entropia: $\frac{8}{14}\cdot\log_2(\frac{14}{8}) + \frac{6}{14}\cdot\log_2(\frac{14}{6}) \approx 0.9852$
+# Entropia Inicial (total): 0.9852
 
-#Desafio 1: Visualização da Lógica (Testando Recursão)
-#Foco: Implementar o método recursivo de percurso em árvore (printTree).
-#Código Esperado (Desafio 1)
-#ID3Algorithm.java (Método preenchido e Teste no main):
+# Desafio 1: Visualização da Lógica (Testando Recursão)
+# Foco: Implementar o método recursivo de percurso em árvore (printTree).
+# Código Esperado (Desafio 1)
+# ID3Algorithm.java (Método preenchido e Teste no main):
 Java
 // ... (imports, calculateEntropy, etc.)
 
@@ -193,7 +193,7 @@ public class ID3Algorithm {
     // ... (Outros métodos)
 }
 
-#Saída Esperada (Desafio 1):
+# Saída Esperada (Desafio 1):
 --- Teste de Percurso em Árvore ---
 -> TESTE: Histórico?
    [Se Histórico é Ruim] -> DECISÃO: Não
@@ -292,7 +292,7 @@ public class ID3Algorithm {
 }
 
 
-#Saída Esperada (Exercício 3 - Lógica da Árvore):
+# Saída Esperada (Exercício 3 - Lógica da Árvore):
 A árvore mais provável construída com este dataset começa com Histórico.
 --- Construção da Árvore ID3 ---
 -> TESTE: Histórico?
@@ -309,7 +309,7 @@ A árvore mais provável construída com este dataset começa com Histórico.
 
 
 
-#Desafio 2: Generalização e Avaliação do Modelo
+# Desafio 2: Generalização e Avaliação do Modelo
 Foco: Implementar a classificação (classify) e calcular a acurácia.
 Código Esperado (Desafio 2)
 ID3Algorithm.java (Métodos preenchidos e Teste no main):
@@ -380,15 +380,15 @@ public class ID3Algorithm {
 }
 
 
-#Saída Esperada (Desafio 2 - Teste de Acurácia):
+# Saída Esperada (Desafio 2 - Teste de Acurácia):
 --- Avaliação do Modelo ---
 ✅ Previsto: Sim | Real: Sim | Dados: {Histórico=Ruim, Renda=Média, Emprego=Estável, Garantia=Não}
 ✅ Previsto: Sim | Real: Sim | Dados: {Histórico=Neutro, Renda=Baixa, Emprego=Estável, Garantia=Não}
 ✅ Previsto: Não | Real: Não | Dados: {Histórico=Bom, Renda=Alta, Emprego=Instável, Garantia=Sim}
 
-#ACURÁCIA (Precisão) do Modelo: 3/3 = 100.00%
+# ACURÁCIA (Precisão) do Modelo: 3/3 = 100.00%
 
-#Resposta Seção 1 - Projeto: Classificador de Aprovação de Empréstimo Pessoal
+# Resposta Seção 1 - Projeto: Classificador de Aprovação de Empréstimo Pessoal
 
 import java.util.HashMap;
 import java.util.Map;
@@ -747,10 +747,10 @@ public class ID3Algorithm {
 
 
 
-#Exercício 2: O Coração Matemático – Entropia
-#Código Esperado (Exercício 2)
-#A lógica do calculateEntropy é idêntica à do projeto anterior, focando apenas no novo TARGET_ATTRIBUTE ("Assistir").
-#Java
+# Exercício 2: O Coração Matemático – Entropia
+# Código Esperado (Exercício 2)
+# A lógica do calculateEntropy é idêntica à do projeto anterior, focando apenas no novo TARGET_ATTRIBUTE ("Assistir").
+Java
 // ... (código anterior)
 
     public static void main(String[] args) {
@@ -778,17 +778,14 @@ public class ID3Algorithm {
 
 // ... (código posterior)
 
-
 Saída Esperada (Exercício 2):
 (9 Sim / 5 Não) $\approx 0.9403$
 Entropia Inicial (total): 0.9403
 
-
-
-#Desafio 1: Visualização da Lógica (Testando Recursão)
-#Código Esperado (Desafio 1)
-#A lógica de teste é a mesma, mas os rótulos de exemplo refletem o novo projeto.
-#Java
+# Desafio 1: Visualização da Lógica (Testando Recursão)
+# Código Esperado (Desafio 1)
+#A  lógica de teste é a mesma, mas os rótulos de exemplo refletem o novo projeto.
+Java
 // ... (código anterior)
 
     public static void main(String[] args) {
@@ -831,7 +828,7 @@ Entropia Inicial (total): 0.9403
 // ...
 
 
-Saída Esperada (Desafio 1):
+# Saída Esperada (Desafio 1):
 --- Teste de Percurso em Árvore ---
 -> TESTE: Gênero?
    [Se Gênero é Ação] -> TESTE: Avaliação?
@@ -843,10 +840,10 @@ Saída Esperada (Desafio 1):
 
 
 
-#Exercício 3: Seleção do Atributo e Construção Recursiva
-#Código Esperado (Exercício 3)
-#Os métodos calculateGain e buildTree são exatamente os mesmos do projeto anterior em termos de lógica, utilizando o calculateEntropy recém-criado.
-#Java
+# Exercício 3: Seleção do Atributo e Construção Recursiva
+# Código Esperado (Exercício 3)
+# Os métodos calculateGain e buildTree são exatamente os mesmos do projeto anterior em termos de lógica, utilizando o calculateEntropy recém-criado.
+Java
 // ... (código anterior)
 
     public static void main(String[] args) {
@@ -904,7 +901,7 @@ Saída Esperada (Desafio 1):
 }
 
 
-#Saída Esperada (Exercício 3 - Lógica da Árvore):
+# Saída Esperada (Exercício 3 - Lógica da Árvore):
 A árvore mais provável construída com este dataset começa com Avaliação.
 --- Construção da Árvore ID3 ---
 -> TESTE: Avaliação?
@@ -921,9 +918,9 @@ A árvore mais provável construída com este dataset começa com Avaliação.
 
 
 
-#Desafio 2: Generalização e Avaliação do Modelo
-#Código Esperado (Desafio 2 - Final do Projeto)
-#Java
+# Desafio 2: Generalização e Avaliação do Modelo
+# Código Esperado (Desafio 2 - Final do Projeto)
+# Java
 // ... (código anterior)
 
     public static void main(String[] args) {
@@ -984,7 +981,7 @@ A árvore mais provável construída com este dataset começa com Avaliação.
 }
 
 
-Saída Esperada (Desafio 2 - Teste de Acurácia):
+# Saída Esperada (Desafio 2 - Teste de Acurácia):
 --- Avaliação do Modelo (Testando Recomendações) ---
 ✅ Previsto: Não | Real: Não
 ✅ Previsto: Sim | Real: Sim
@@ -992,7 +989,7 @@ Saída Esperada (Desafio 2 - Teste de Acurácia):
 
 ACURÁCIA (Precisão) do Modelo: 3/3 = 100.00%
 
-#Resposta do Projeto 2 da Seção 1: Projeto: Recomendador de Filmes/Séries (ID3 em Java).
+# Resposta do Projeto 2 da Seção 1: Projeto: Recomendador de Filmes/Séries (ID3 em Java).
 
 import java.util.HashMap;
 import java.util.Map;
@@ -1294,9 +1291,9 @@ public class ID3Algorithm {
 
 
 
-▶️ Exercício 2: Entropia e Desafio 1: Recursão (printTree)
-Estes métodos seguem exatamente a mesma lógica dos projetos anteriores, focando na Entropia do novo alvo ("Decisão") e na capacidade de fazer percursos recursivos.
-Código Esperado (Ex. 2 e Des. 1)
+# Exercício 2: Entropia e Desafio 1: Recursão (printTree)
+# Estes métodos seguem exatamente a mesma lógica dos projetos anteriores, focando na Entropia do novo alvo ("Decisão") e na capacidade de fazer percursos recursivos.
+# Código Esperado (Ex. 2 e Des. 1)
 Java
 // ... (código anterior)
 
@@ -1359,9 +1356,9 @@ Java
 
 
 
-▶️ Exercício 3: Ganho de Informação e ID3
-A lógica ID3 deve identificar Céu como o atributo mais informativo para o nó raiz.
-Código Esperado (Exercício 3)
+# Exercício 3: Ganho de Informação e ID3
+# A lógica ID3 deve identificar Céu como o atributo mais informativo para o nó raiz.
+# Código Esperado (Exercício 3)
 Java
 // ... (imports, calculateEntropy, printTree)
 
@@ -1424,7 +1421,7 @@ Java
 }
 
 
-Saída Esperada (Lógica da Árvore ID3):
+# Saída Esperada (Lógica da Árvore ID3):
 --- Construção da Árvore ID3 ---
 -> TESTE: Céu?
    [Se Céu é Ensolarado] -> TESTE: Vento?
@@ -1503,7 +1500,7 @@ Java
 }
 
 
-Saída Esperada (Desafio 2 - Teste de Acurácia):
+# Saída Esperada (Desafio 2 - Teste de Acurácia):
 --- Avaliação do Modelo (Testando Decisões de Passeio) ---
 ✅ Previsto: Ficar em Casa | Real: Ficar em Casa
 ✅ Previsto: Ir | Real: Ir
@@ -1556,7 +1553,6 @@ public class TreeNode {
         }
     }
 }
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1769,7 +1765,6 @@ public class ID3Algorithm {
             return "DESCONHECIDO"; //
         }
     }
-
 
     public static void main(String[] args) {
         // --- EXERCÍCIO 1: SETUP E VERIFICAÇÃO ---

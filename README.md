@@ -1809,3 +1809,443 @@ public class ID3Algorithm {
     }
 }
 
+# Seção 2 - Projeto: Detector de Spam de E-mail (ID3 em Java)
+# Dataset Utilizado (14 Instâncias)
+# O objetivo é classificar se o e-mail é Spam ou Não Spam, baseado em quatro características comuns:
+
+<img width="435" height="769" alt="image" src="https://github.com/user-attachments/assets/7d2fac03-047e-4373-a390-d9d2bdd3a236" />
+
+Variáveis Globais do Projeto:
+TARGET_ATTRIBUTE: "Decisão"
+ATTRIBUTES: Assunto, Remetente, Anexos, Pontuação
+
+ Exercício 1: Setup e Representação de Dados
+Foco: Criação de classes e carregamento dos dados.
+Código Esperado (Exercício 1)
+ID3Algorithm.java (Trecho de DATA preenchido):
+Java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
+import java.lang.Math;
+import java.util.Comparator;
+
+public class ID3Algorithm {
+    
+    // VARIÁVEIS GLOBAIS DE SETUP
+    public static final String TARGET_ATTRIBUTE = "Decisão";
+    public static final List<String> ATTRIBUTES = List.of("Assunto", "Remetente", "Anexos", "Pontuação");
+
+    // Conjunto de dados (Dataset) - 14 Instâncias
+    public static final List<Map<String, String>> DATA = List.of(
+        Map.of("Assunto", "Com Oferta", "Remetente", "Desconhecido", "Anexos", "Não", "Pontuação", "Exclamações", TARGET_ATTRIBUTE, "Spam"),
+        Map.of("Assunto", "Com Oferta", "Remetente", "Desconhecido", "Anexos", "Sim", "Pontuação", "Exclamações", TARGET_ATTRIBUTE, "Spam"),
+        Map.of("Assunto", "Sem Oferta", "Remetente", "Conhecido", "Anexos", "Não", "Pontuação", "Normal", TARGET_ATTRIBUTE, "Não Spam"),
+        Map.of("Assunto", "Sem Oferta", "Remetente", "Desconhecido", "Anexos", "Não", "Pontuação", "Normal", TARGET_ATTRIBUTE, "Não Spam"),
+        Map.of("Assunto", "Sem Oferta", "Remetente", "Conhecido", "Anexos", "Não", "Pontuação", "Normal", TARGET_ATTRIBUTE, "Não Spam"),
+        Map.of("Assunto", "Sem Oferta", "Remetente", "Conhecido", "Anexos", "Sim", "Pontuação", "Exclamações", TARGET_ATTRIBUTE, "Spam"),
+        Map.of("Assunto", "Com Oferta", "Remetente", "Desconhecido", "Anexos", "Não", "Pontuação", "Normal", TARGET_ATTRIBUTE, "Spam"),
+        Map.of("Assunto", "Com Oferta", "Remetente", "Conhecido", "Anexos", "Não", "Pontuação", "Exclamações", TARGET_ATTRIBUTE, "Spam"),
+        Map.of("Assunto", "Sem Oferta", "Remetente", "Desconhecido", "Anexos", "Não", "Pontuação", "Normal", TARGET_ATTRIBUTE, "Não Spam"),
+        Map.of("Assunto", "Sem Oferta", "Remetente", "Conhecido", "Anexos", "Não", "Pontuação", "Normal", TARGET_ATTRIBUTE, "Não Spam"),
+        Map.of("Assunto", "Sem Oferta", "Remetente", "Desconhecido", "Anexos", "Sim", "Pontuação", "Exclamações", TARGET_ATTRIBUTE, "Não Spam"),
+        Map.of("Assunto", "Com Oferta", "Remetente", "Desconhecido", "Anexos", "Sim", "Pontuação", "Normal", TARGET_ATTRIBUTE, "Spam"),
+        Map.of("Assunto", "Sem Oferta", "Remetente", "Conhecido", "Anexos", "Sim", "Pontuação", "Normal", TARGET_ATTRIBUTE, "Não Spam"),
+        Map.of("Assunto", "Com Oferta", "Remetente", "Conhecido", "Anexos", "Sim", "Pontuação", "Exclamações", TARGET_ATTRIBUTE, "Spam")
+    );
+
+    public static void main(String[] args) {
+        System.out.println("Setup concluído! Total de Instâncias: " + DATA.size());
+    }
+
+    // MÉTODOS DE ML (IDÊNTICOS AOS PROJETOS ANTERIORES NA LÓGICA)
+    // ...
+}
+
+
+
+# Exercício 2: Entropia e Desafio 1: Recursão (printTree)
+# A lógica de Entropia e Recursão é idêntica, apenas mudando o conjunto de dados.
+# Código Esperado (Ex. 2 e Des. 1)
+Java
+// ... (código anterior)
+
+    public static void main(String[] args) {
+        // ... (Verificação de setup do Ex. 1)
+        
+        // Teste do Exercício 2
+        double initialEntropy = calculateEntropy(DATA, TARGET_ATTRIBUTE);
+        System.out.printf("\nEntropia Inicial (total): %.4f\n", initialEntropy); // Saída esperada: 0.9403
+
+        // ------------------ DESAFIO 1: TESTE DA FUNÇÃO RECURSIVA printTree ------------------
+        
+        // Cria uma micro-árvore manual para teste (Ex: Assunto -> Remetente)
+        TreeNode rootTest = new TreeNode("Assunto", false);
+        TreeNode comOfertaTest = new TreeNode("Spam", true);
+        TreeNode semOfertaTest = new TreeNode("Remetente", false);
+
+        rootTest.addChild("Com Oferta", comOfertaTest);
+        rootTest.addChild("Sem Oferta", semOfertaTest);
+        
+        semOfertaTest.addChild("Conhecido", new TreeNode("Não Spam", true));
+        semOfertaTest.addChild("Desconhecido", new TreeNode("Não Spam", true));
+
+        System.out.println("\n--- Teste de Percurso em Árvore ---");
+        printTree(rootTest, "");
+    }
+    
+    /** Calcula a Entropia */
+    public static double calculateEntropy(List<Map<String, String>> data, String targetAttribute) {
+        if (data.isEmpty()) { return 0.0; }
+        // Implementação idêntica...
+        Map<String, Long> countByClass = data.stream()
+            .collect(Collectors.groupingBy(instance -> instance.get(targetAttribute), Collectors.counting()));
+        double entropy = 0.0;
+        int totalInstances = data.size();
+        for (Long count : countByClass.values()) {
+            double probability = (double) count / totalInstances;
+            if (probability > 0) {
+                entropy -= probability * (Math.log(probability) / Math.log(2)); 
+            }
+        }
+        return entropy;
+    }
+    
+    /** Imprime a Árvore de Decisão usando Recursão */
+    public static void printTree(TreeNode node, String prefix) {
+        // Implementação idêntica...
+        if (node.isLeaf) {
+            System.out.println(prefix + "-> DECISÃO: " + node.attribute);
+            return;
+        }
+        System.out.println(prefix + "-> TESTE: " + node.attribute + "?");
+        for (Map.Entry<String, TreeNode> entry : node.children.entrySet()) {
+            String newPrefix = prefix + "   [Se " + node.attribute + " é " + entry.getKey() + "] ";
+            printTree(entry.getValue(), newPrefix);
+        }
+    }
+    
+    // ... (assinaturas dos métodos de Ganho e Construção)
+
+# Exercício 3: Ganho de Informação e ID3
+A lógica ID3 deve identificar o Assunto ou a Pontuação como o atributo mais informativo para o nó raiz.
+Código Esperado (Exercício 3)
+Os métodos calculateGain e buildTree são exatamente os mesmos do projeto anterior em termos de lógica, garantindo que os alunos possam reutilizar o código principal e focar na análise do resultado.
+Lógica da Árvore ID3 (Saída Esperada):
+--- Construção da Árvore ID3 ---
+-> TESTE: Assunto?
+   [Se Assunto é Com Oferta] -> DECISÃO: Spam
+   [Se Assunto é Sem Oferta] -> TESTE: Pontuação?
+      [Se Pontuação é Normal] -> TESTE: Remetente?
+         [Se Remetente é Conhecido] -> DECISÃO: Não Spam
+         [Se Remetente é Desconhecido] -> DECISÃO: Não Spam
+      [Se Pontuação é Exclamações] -> TESTE: Remetente?
+         [Se Remetente é Conhecido] -> DECISÃO: Spam
+         [Se Remetente é Desconhecido] -> DECISÃO: Não Spam
+
+
+
+# Desafio 2: Classificação e Acurácia
+O método classify() e a lógica de avaliação no main são idênticos, apenas usando um novo conjunto de teste.
+Código Esperado (Desafio 2 - Final do Projeto)
+Java
+// ... (código anterior)
+
+    public static void main(String[] args) {
+        // ... (Construção da Árvore do Ex. 3)
+        TreeNode decisionTree = buildTree(DATA, ATTRIBUTES, TARGET_ATTRIBUTE);
+        // ... (printTree)
+
+        // ------------------ DESAFIO 2: TESTE DE INFERÊNCIA E ACURÁCIA ------------------
+
+        // Dados de TESTE (Instâncias NUNCA VISTAS)
+        List<Map<String, String>> TEST_DATA = List.of(
+            // 1. Sem Oferta, Conhecido, Sim, Exclamações (Esperado: Spam)
+            Map.of("Assunto", "Sem Oferta", "Remetente", "Conhecido", "Anexos", "Sim", "Pontuação", "Exclamações", TARGET_ATTRIBUTE, "Spam"), 
+            // 2. Com Oferta, Conhecido, Não, Normal (Esperado: Spam)
+            Map.of("Assunto", "Com Oferta", "Remetente", "Conhecido", "Anexos", "Não", "Pontuação", "Normal", TARGET_ATTRIBUTE, "Spam"), 
+            // 3. Sem Oferta, Desconhecido, Não, Exclamações (Esperado: Não Spam)
+            Map.of("Assunto", "Sem Oferta", "Remetente", "Desconhecido", "Anexos", "Não", "Pontuação", "Exclamações", TARGET_ATTRIBUTE, "Não Spam")
+        );
+        
+        // ... (Lógica de loop e cálculo de acurácia)
+    }
+
+    /** Usa a Árvore para Classificar */
+    public static String classify(TreeNode node, Map<String, String> instance) {
+        // Implementação idêntica...
+        if (node.isLeaf) {
+            return node.attribute;
+        }
+        String attributeValue = instance.get(node.attribute);
+        if (node.children.containsKey(attributeValue)) {
+            return classify(node.children.get(attributeValue), instance);
+        } else {
+            System.err.println("Aviso: Valor não visto ('" + attributeValue + "') no atributo '" + node.attribute + "'. Não foi possível classificar.");
+            return "DESCONHECIDO"; 
+        }
+    }
+}
+
+Resposta: Projeto 4 - Projeto: Detector de Spam de E-mail (ID3 em Java)
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Representa um nó na Árvore de Decisão ID3.
+ * O nó pode ser um Nó de Teste (interno) ou um Nó de Decisão/Folha (final).
+ */
+public class TreeNode {
+    // Para nós de teste, armazena o nome do atributo (ex: "Assunto").
+    // Para nós folha, armazena a decisão final (ex: "Spam").
+    public String attribute;
+    
+    // Indica se é um nó folha (Decisão) ou um nó interno (Teste).
+    public boolean isLeaf;
+    
+    // Mapeia o valor do atributo (ex: "Com Oferta") para o próximo TreeNode.
+    public Map<String, TreeNode> children;
+
+    /**
+     * Construtor para um novo nó.
+     */
+    public TreeNode(String attribute, boolean isLeaf) {
+        this.attribute = attribute;
+        this.isLeaf = isLeaf;
+        
+        // Inicializa o mapa de filhos apenas se for um nó de teste (não-folha).
+        if (!isLeaf) {
+            this.children = new HashMap<>();
+        }
+    }
+
+    /**
+     * Adiciona um filho ao nó atual.
+     */
+    public void addChild(String value, TreeNode child) {
+        if (!isLeaf && children != null) {
+            this.children.put(value, child);
+        }
+    }
+}
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.stream.Collectors;
+import java.lang.Math;
+import java.util.Comparator;
+import java.util.Arrays; // Importação necessária para compatibilidade
+
+/**
+ * Implementação do Algoritmo ID3 para o projeto "Detector de Spam de E-mail".
+ */
+public class ID3Algorithm {
+
+    // --- VARIÁVEIS GLOBAIS DE SETUP ---
+    public static final String TARGET_ATTRIBUTE = "Decisão"; // Atributo alvo: "Spam" ou "Não Spam"
+    // Correção: Usando Arrays.asList() + ArrayList para compatibilidade
+    public static final List<String> ATTRIBUTES = new ArrayList<>(Arrays.asList("Assunto", "Remetente", "Anexos", "Pontuação")); 
+
+    /**
+     * Método auxiliar para criar uma instância de dado (Map) de forma compatível (substitui Map.of).
+     */
+    private static Map<String, String> createMap(String assunto, String remetente, String anexos, String pontuacao, String decisao) {
+        Map<String, String> map = new HashMap<>();
+        map.put("Assunto", assunto);
+        map.put("Remetente", remetente);
+        map.put("Anexos", anexos);
+        map.put("Pontuação", pontuacao);
+        map.put(TARGET_ATTRIBUTE, decisao);
+        return map;
+    }
+    
+    // Conjunto de dados (Dataset) de TREINO - 14 Instâncias do projeto "Detector de Spam"
+    public static final List<Map<String, String>> DATA = new ArrayList<>(Arrays.asList(
+        createMap("Com Oferta", "Desconhecido", "Não", "Exclamações", "Spam"), // 1
+        createMap("Com Oferta", "Desconhecido", "Sim", "Exclamações", "Spam"), // 2
+        createMap("Sem Oferta", "Conhecido", "Não", "Normal", "Não Spam"), // 3
+        createMap("Sem Oferta", "Desconhecido", "Não", "Normal", "Não Spam"), // 4
+        createMap("Sem Oferta", "Conhecido", "Não", "Normal", "Não Spam"), // 5
+        createMap("Sem Oferta", "Conhecido", "Sim", "Exclamações", "Spam"), // 6
+        createMap("Com Oferta", "Desconhecido", "Não", "Normal", "Spam"), // 7
+        createMap("Com Oferta", "Conhecido", "Não", "Exclamações", "Spam"), // 8
+        createMap("Sem Oferta", "Desconhecido", "Não", "Normal", "Não Spam"), // 9
+        createMap("Sem Oferta", "Conhecido", "Não", "Normal", "Não Spam"), // 10
+        createMap("Sem Oferta", "Desconhecido", "Sim", "Exclamações", "Não Spam"), // 11
+        createMap("Com Oferta", "Desconhecido", "Sim", "Normal", "Spam"), // 12
+        createMap("Sem Oferta", "Conhecido", "Sim", "Normal", "Não Spam"), // 13
+        createMap("Com Oferta", "Conhecido", "Sim", "Exclamações", "Spam") // 14
+    ));
+
+    // Dados de TESTE (Instâncias NUNCA VISTAS) do projeto
+    public static final List<Map<String, String>> TEST_DATA = new ArrayList<>(Arrays.asList(
+        // 1. Sem Oferta, Conhecido, Sim, Exclamações (Esperado: Spam)
+        createMap("Sem Oferta", "Conhecido", "Sim", "Exclamações", "Spam"),
+        // 2. Com Oferta, Conhecido, Não, Normal (Esperado: Spam)
+        createMap("Com Oferta", "Conhecido", "Não", "Normal", "Spam"),
+        // 3. Sem Oferta, Desconhecido, Não, Exclamações (Esperado: Não Spam)
+        createMap("Sem Oferta", "Desconhecido", "Não", "Exclamações", "Não Spam")
+    ));
+
+
+    // --- MÉTODOS DE CÁLCULO ---
+
+    /** * Calcula a Entropia de um conjunto de dados. */
+    public static double calculateEntropy(List<Map<String, String>> data, String targetAttribute) {
+        if (data.isEmpty()) { return 0.0; }
+        
+        Map<String, Long> countByClass = data.stream()
+            .collect(Collectors.groupingBy(instance -> instance.get(targetAttribute), Collectors.counting()));
+        
+        double entropy = 0.0;
+        int totalInstances = data.size();
+
+        for (Long count : countByClass.values()) {
+            double probability = (double) count / totalInstances;
+            if (probability > 0) { 
+                entropy -= probability * (Math.log(probability) / Math.log(2)); 
+            }
+        }
+        return entropy;
+    }
+
+    /** * Calcula o Ganho de Informação para um atributo. */
+    public static double calculateGain(List<Map<String, String>> data, String attribute, String targetAttribute) {
+        double totalEntropy = calculateEntropy(data, targetAttribute); 
+        int totalInstances = data.size();
+
+        Map<String, List<Map<String, String>>> splitData = data.stream()
+            .collect(Collectors.groupingBy(instance -> instance.get(attribute)));
+        
+        double weightedEntropy = 0.0; 
+
+        for (List<Map<String, String>> subset : splitData.values()) {
+            double probability = (double) subset.size() / totalInstances; 
+            weightedEntropy += probability * calculateEntropy(subset, targetAttribute); 
+        }
+        
+        return totalEntropy - weightedEntropy;
+    }
+
+
+    // --- MÉTODOS DE CONSTRUÇÃO E CLASSIFICAÇÃO ---
+
+    /** * Algoritmo Recursivo ID3 para Construir a Árvore. */
+    public static TreeNode buildTree(List<Map<String, String>> data, List<String> availableAttributes, String targetAttribute) {
+        
+        // CASO BASE 1: Pureza (Todos os exemplos têm a mesma classe).
+        String firstClass = data.get(0).get(targetAttribute);
+        if (data.stream().allMatch(instance -> instance.get(targetAttribute).equals(firstClass))) {
+            return new TreeNode(firstClass, true); 
+        }
+        
+        // CASO BASE 2: Não há mais atributos ou conjunto vazio.
+        if (availableAttributes.isEmpty() || data.isEmpty()) {
+            String majorityClass = data.stream().collect(Collectors.groupingBy(instance -> instance.get(targetAttribute), Collectors.counting()))
+                .entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse(firstClass);
+            return new TreeNode(majorityClass, true);
+        }
+
+        // LÓGICA RECURSIVA: Encontrar o atributo com o MAIOR Ganho (Nó Raiz)
+        String bestAttribute = availableAttributes.stream()
+            .max(Comparator.comparingDouble(attribute -> calculateGain(data, attribute, targetAttribute))) 
+            .orElseThrow(() -> new IllegalStateException("Erro: Não foi possível encontrar o melhor atributo."));
+
+        TreeNode root = new TreeNode(bestAttribute, false);
+        List<String> remainingAttributes = new ArrayList<>(availableAttributes);
+        remainingAttributes.remove(bestAttribute);
+
+        // Chamada Recursiva
+        Map<String, List<Map<String, String>>> splitData = data.stream()
+            .collect(Collectors.groupingBy(instance -> instance.get(bestAttribute)));
+
+        for (Map.Entry<String, List<Map<String, String>>> entry : splitData.entrySet()) {
+            root.addChild(entry.getKey(), buildTree(entry.getValue(), remainingAttributes, targetAttribute));
+        }
+
+        return root;
+    }
+
+    /** * Imprime a Árvore de Decisão usando Recursão (Visualização). */
+    public static void printTree(TreeNode node, String prefix) {
+        if (node.isLeaf) { // Caso Base: Nó Folha
+            System.out.println(prefix + "-> DECISÃO: " + node.attribute); 
+            return;
+        }
+        
+        System.out.println(prefix + "-> TESTE: " + node.attribute + "?"); 
+        
+        for (Map.Entry<String, TreeNode> entry : node.children.entrySet()) {
+            String newPrefix = prefix + "   [Se " + node.attribute + " é " + entry.getKey() + "] ";
+            printTree(entry.getValue(), newPrefix);
+        }
+    }
+
+    /** * Usa a Árvore para Classificar uma nova instância. */
+    public static String classify(TreeNode node, Map<String, String> instance) {
+        if (node.isLeaf) {
+            return node.attribute;
+        }
+        
+        String attributeValue = instance.get(node.attribute);
+        
+        if (node.children.containsKey(attributeValue)) {
+            return classify(node.children.get(attributeValue), instance);
+        } else {
+            System.err.println("Aviso: Valor não visto ('" + attributeValue + "') no atributo '" + node.attribute + "'. Não foi possível classificar.");
+            return "DESCONHECIDO"; 
+        }
+    }
+
+
+    public static void main(String[] args) {
+        // --- ETAPA 1: SETUP ---
+        System.out.println("Setup concluído! Total de Instâncias de Treino: " + DATA.size());
+
+        // --- ETAPA 2: ENTROPIA INICIAL ---
+        double initialEntropy = calculateEntropy(DATA, TARGET_ATTRIBUTE);
+        System.out.printf("\nEntropia Inicial (total): %.4f\n", initialEntropy);
+
+        // --- ETAPA 3: CONSTRUÇÃO E IMPRESSÃO DA ÁRVORE ID3 ---
+        System.out.println("\n--- Construção da Árvore ID3 ---");
+        
+        TreeNode decisionTree = buildTree(DATA, ATTRIBUTES, TARGET_ATTRIBUTE);
+        
+        printTree(decisionTree, ""); 
+
+        // --- ETAPA 4: AVALIAÇÃO DO MODELO E ACURÁCIA ---
+        System.out.println("\n--- Avaliação do Modelo (Testando Classificação de Spam) ---");
+        
+        int correctPredictions = 0;
+
+        for (Map<String, String> testInstance : TEST_DATA) {
+            String actualClass = testInstance.get(TARGET_ATTRIBUTE);
+            Map<String, String> instanceToClassify = new HashMap<>(testInstance);
+            instanceToClassify.remove(TARGET_ATTRIBUTE);
+
+            String prediction = classify(decisionTree, instanceToClassify);
+
+            if (prediction.equals(actualClass)) {
+                correctPredictions++;
+                System.out.print( "✅ " );
+            } else {
+                System.out.print( "❌ " );
+            }
+            System.out.println("Previsto: " + prediction + " | Real: " + actualClass);
+        }
+
+        double accuracy = (double) correctPredictions / TEST_DATA.size() * 100;
+        System.out.printf("\nACURÁCIA (Precisão) do Modelo: %d/%d = %.2f%%\n",
+            correctPredictions, TEST_DATA.size(), accuracy);
+    }
+}
+
+
+
+
+

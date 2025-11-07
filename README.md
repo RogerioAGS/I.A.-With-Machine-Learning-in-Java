@@ -1,7 +1,7 @@
 # I.A.-With-Machine-Learning-in-Java
 # Programação Oracle - Java Inteligência artificial com Machine Learning
 
-# Projeto: Classificador de Aprovação de Empréstimo Pessoal
+# Projeto 1 - Projeto: Classificador de Aprovação de Empréstimo Pessoal
 # Dataset Utilizado (14 Instâncias)
 # O objetivo é classificar se o empréstimo deve ser Aprovado (Sim/Não) com base em quatro atributos de risco:
 
@@ -87,8 +87,6 @@ public class ID3Algorithm {
     // ...
 }
 
-
-
 # Exercício 2: O Coração Matemático – Entropia
 # Foco: Implementar a fórmula da Entropia (calculateEntropy).
 # Código Esperado (Exercício 2)
@@ -132,10 +130,10 @@ public class ID3Algorithm {
 }
 
 # Saída Esperada (Exercício 2):
-# Total de Sim: 8
-# Total de Não: 6
-# Entropia: $\frac{8}{14}\cdot\log_2(\frac{14}{8}) + \frac{6}{14}\cdot\log_2(\frac{14}{6}) \approx 0.9852$
-# Entropia Inicial (total): 0.9852
+ Total de Sim: 8
+ Total de Não: 6
+ Entropia: $\frac{8}{14}\cdot\log_2(\frac{14}{8}) + \frac{6}{14}\cdot\log_2(\frac{14}{6}) \approx 0.9852$
+ Entropia Inicial (total): 0.9852
 
 # Desafio 1: Visualização da Lógica (Testando Recursão)
 # Foco: Implementar o método recursivo de percurso em árvore (printTree).

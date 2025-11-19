@@ -2434,34 +2434,34 @@ public class ID3Metrics {
 
 #4. ID3Algorithm.java
 #Objetivo: Implementar o processo recursivo de construção da árvore.
-
+    
 Função: Contém o método principal buildTree, que:
-
+    
 Identifica o melhor atributo usando o ID3Metrics.
-
+    
 Cria um nó de decisão com esse atributo.
-
+    
 Divide o conjunto de dados (usando o filterDataset de ID3Metrics) para cada valor do atributo.
-
+    
 Chama-se recursivamente para construir as subárvores.
-
+    
 Papel no ID3: É o "motor" do algoritmo, responsável por treinar o modelo a partir dos dados.
-
+    
 import java.util.*;
 import static java.lang.Math.*;
-
+    
 /**
  * Classe utilitária para calcular as métricas do algoritmo ID3:
  * Entropia e Ganho de Informação.
  */
 @SuppressWarnings("unused")
 public class ID3Metrics {
-
+    
     /** Auxiliar: Implementa log na base 2, tratando log(0) como 0 (para evitar NaN na entropia). */
     public static double log2(double x) {
         return (x <= 0) ? 0.0 : Math.log(x) / Math.log(2);
     }
-
+    
     /** 2.1. Contagem de Rótulos: Conta a frequência de cada classe. */
     public static Map<String, Long> countLabels(List<DataPoint> dataset) {
         Map<String, Long> counts = new HashMap<>();
@@ -2470,15 +2470,15 @@ public class ID3Metrics {
         }
         return counts;
     }
-
+    
     /** 2.2. Cálculo da Entropia: Mede a impureza de um conjunto de dados S. */
     public static double calculateEntropy(List<DataPoint> dataset) {
         double entropy = 0.0;
         double total = dataset.size();
         if (total == 0) return 0.0;
-
+    
         Map<String, Long> counts = countLabels(dataset);
-
+    
         // Fórmula da Entropia: E(S) = - sum(p_i * log2(p_i))
         for (Long count : counts.values()) {
             double p = count / total; // Proporção da classe i

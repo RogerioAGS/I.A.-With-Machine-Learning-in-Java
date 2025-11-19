@@ -2247,6 +2247,8 @@ public class ID3Algorithm {
 
 #Seção 3 - Projeto 5: Classificador de Tipo de Smartphone (Consumo)
 
+Código está no Projeto: Projeto5ClassificadordeTipoDeSmartphone
+
 #O objetivo principal do projeto é construir um Classificador de Tipo de Smartphone usando o algoritmo de Árvore de Decisão ID3.
 
 A finalidade prática é prever a decisão binária de um consumidor (se ele deve "Trocar" ou "Não Trocar" de smartphone) com base em suas características (Sistema Operacional, Tela, Câmera e Preço).

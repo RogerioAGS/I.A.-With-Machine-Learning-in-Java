@@ -10,26 +10,26 @@
 Variáveis Globais do Projeto:
 TARGET_ATTRIBUTE: "Aprovar"
 ATTRIBUTES: Histórico, Renda, Emprego, Garantia
-
-# Exercício 1: Setup e Representação de Dados
-# Foco: Criação de classes e organização do dataset.
-# Código de Início (Setup do Projeto)
-# O código da classe TreeNode.java é o mesmo (pois a estrutura de árvore não muda).
-ID3Algorithm.java (Início):
-Java
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.stream.Collectors;
-import java.lang.Math;
-import java.util.Comparator;
-
-public class ID3Algorithm {
     
-    // VARIÁVEIS GLOBAIS DE SETUP
-    public static final String TARGET_ATTRIBUTE = "Aprovar";
+# Exercício 1: Setup e Representação de Dados    
+# Foco: Criação de classes e organização do dataset.    
+# Código de Início (Setup do Projeto)    
+# O código da classe TreeNode.java é o mesmo (pois a estrutura de árvore não muda).    
+ID3Algorithm.java (Início):    
+Java    
+import java.util.ArrayList;    
+import java.util.List;    
+import java.util.Map;    
+import java.util.HashMap;    
+import java.util.stream.Collectors;    
+import java.lang.Math;    
+import java.util.Comparator;    
     
+public class ID3Algorithm {    
+        
+    // VARIÁVEIS GLOBAIS DE SETUP        
+    public static final String TARGET_ATTRIBUTE = "Aprovar";    
+        
     // Lista de atributos
     public static final List<String> ATTRIBUTES = List.of("Histórico", "Renda", "Emprego", "Garantia");
 
@@ -58,12 +58,12 @@ public class ID3Algorithm {
 ID3Algorithm.java (Trecho de DATA preenchido):
 Java
 // ... (imports)
-
-public class ID3Algorithm {
-    // ... (TARGET_ATTRIBUTE e ATTRIBUTES)
-
-    // Conjunto de dados (Dataset) - 14 Instâncias
-    public static final List<Map<String, String>> DATA = List.of(
+    
+public class ID3Algorithm {    
+    // ... (TARGET_ATTRIBUTE e ATTRIBUTES)    
+    
+    // Conjunto de dados (Dataset) - 14 Instâncias    
+    public static final List<Map<String, String>> DATA = List.of(    
         Map.of("Histórico", "Ruim", "Renda", "Baixa", "Emprego", "Instável", "Garantia", "Não", TARGET_ATTRIBUTE, "Não"),
         Map.of("Histórico", "Ruim", "Renda", "Baixa", "Emprego", "Instável", "Garantia", "Sim", TARGET_ATTRIBUTE, "Não"),
         Map.of("Histórico", "Neutro", "Renda", "Alta", "Emprego", "Estável", "Garantia", "Não", TARGET_ATTRIBUTE, "Sim"),
@@ -85,33 +85,33 @@ public class ID3Algorithm {
         // ...
     }
     // ...
-}
-
-# Exercício 2: O Coração Matemático – Entropia
-# Foco: Implementar a fórmula da Entropia (calculateEntropy).
-# Código Esperado (Exercício 2)
-# ID3Algorithm.java (Método preenchido e Teste no main):
-Java
-// ... (imports)
-
-public class ID3Algorithm {
-    // ... (DATA e variáveis globais)
-
-    public static void main(String[] args) {
-        // ... (Verificação de setup do Ex. 1)
-
-        // Teste do Exercício 2
-        double initialEntropy = calculateEntropy(DATA, TARGET_ATTRIBUTE);
-        System.out.printf("\nEntropia Inicial (total): %.4f\n", initialEntropy);
-    }
+}    
     
-    /**
-     * Calcula a Entropia de um conjunto de dados.
-     */
-    public static double calculateEntropy(List<Map<String, String>> data, String targetAttribute) {
-        if (data.isEmpty()) { return 0.0; }
-
-        Map<String, Long> countByClass = data.stream()
+# Exercício 2: O Coração Matemático – Entropia    
+# Foco: Implementar a fórmula da Entropia (calculateEntropy).    
+# Código Esperado (Exercício 2)    
+# ID3Algorithm.java (Método preenchido e Teste no main):    
+Java    
+// ... (imports)    
+    
+public class ID3Algorithm {    
+    // ... (DATA e variáveis globais)    
+    
+    public static void main(String[] args) {    
+        // ... (Verificação de setup do Ex. 1)    
+    
+        // Teste do Exercício 2    
+        double initialEntropy = calculateEntropy(DATA, TARGET_ATTRIBUTE);    
+        System.out.printf("\nEntropia Inicial (total): %.4f\n", initialEntropy);    
+    }    
+        
+    /**    
+     * Calcula a Entropia de um conjunto de dados.    
+     */    
+    public static double calculateEntropy(List<Map<String, String>> data, String targetAttribute) {    
+        if (data.isEmpty()) { return 0.0; }    
+    
+        Map<String, Long> countByClass = data.stream()    
             .collect(Collectors.groupingBy(instance -> instance.get(targetAttribute), Collectors.counting()));
 
         double entropy = 0.0;
@@ -129,19 +129,19 @@ public class ID3Algorithm {
     // ... (Outros métodos)
 }
 
-# Saída Esperada (Exercício 2):
+# Saída Esperada (Exercício 2):    
  Total de Sim: 8
  Total de Não: 6
  Entropia: $\frac{8}{14}\cdot\log_2(\frac{14}{8}) + \frac{6}{14}\cdot\log_2(\frac{14}{6}) \approx 0.9852$
  Entropia Inicial (total): 0.9852
-
+    
 # Desafio 1: Visualização da Lógica (Testando Recursão)
 # Foco: Implementar o método recursivo de percurso em árvore (printTree).
 # Código Esperado (Desafio 1)
 # ID3Algorithm.java (Método preenchido e Teste no main):
 Java
 // ... (imports, calculateEntropy, etc.)
-
+    
 public class ID3Algorithm {
     // ... (DATA, calculateEntropy, etc.)
 
@@ -175,32 +175,32 @@ public class ID3Algorithm {
         if (node.isLeaf) {
             System.out.println(prefix + "-> DECISÃO: " + node.attribute);
             return;
-        }
-
+        }    
+    
         System.out.println(prefix + "-> TESTE: " + node.attribute + "?");
 
         for (Map.Entry<String, TreeNode> entry : node.children.entrySet()) {
             String attributeValue = entry.getKey();
             TreeNode childNode = entry.getValue();
-
+    
             // Novo prefixo para mostrar o caminho tomado com recuo (indentação)
             String newPrefix = prefix + "   [Se " + node.attribute + " é " + attributeValue + "] ";
             printTree(childNode, newPrefix);
-        }
-    }
-    // ... (Outros métodos)
-}
-
-# Saída Esperada (Desafio 1):
---- Teste de Percurso em Árvore ---
--> TESTE: Histórico?
-   [Se Histórico é Ruim] -> DECISÃO: Não
-   [Se Histórico é Neutro] -> TESTE: Renda?
-      [Se Renda é Alta] -> DECISÃO: Sim
-      [Se Renda é Baixa] -> DECISÃO: Sim
-   [Se Histórico é Bom] -> TESTE: Emprego?
-      [Se Emprego é Estável] -> DECISÃO: Sim
-
+        }    
+    }    
+    // ... (Outros métodos)    
+}    
+    
+# Saída Esperada (Desafio 1):    
+--- Teste de Percurso em Árvore ---    
+-> TESTE: Histórico?    
+   [Se Histórico é Ruim] -> DECISÃO: Não    
+   [Se Histórico é Neutro] -> TESTE: Renda?    
+      [Se Renda é Alta] -> DECISÃO: Sim    
+      [Se Renda é Baixa] -> DECISÃO: Sim    
+   [Se Histórico é Bom] -> TESTE: Emprego?    
+      [Se Emprego é Estável] -> DECISÃO: Sim    
+    
 #Exercício 3: Seleção do Atributo e Construção Recursiva
 #Foco: Implementar Ganho (calculateGain) e o algoritmo ID3 (buildTree).
 #Código Esperado (Exercício 3)
